@@ -1,0 +1,66 @@
+% idx(+N, +List, -NthElement): Simple getters for the first 4 elements of a list.
+idx(1, [H|_], H).
+idx(2, [_,X|_], X).
+idx(3, [_,_,X|_], X).
+idx(4, [_,_,_,X|_], X).
+
+% rotate(+X, +Rot, -Result): Rotate index X by Rot.
+rotate(X, Rot, Result) :- Result is ((X + Rot - 1) mod 4 + 1).
+
+% edge(+Direction, +Part, -Letter, -Charge): Yields the Letter and Charge of the given edge of Part.
+edge(north, (Sides, Rot), L, C)	:- rotate(1, Rot, X), idx(X, Sides, (L, C)).
+edge(east, (Sides, Rot), L, C)	:- rotate(2, Rot, X), idx(X, Sides, (L, C)).
+edge(south, (Sides, Rot), L, C)	:- rotate(3, Rot, X), idx(X, Sides, (L, C)).
+edge(west, (Sides, Rot), L, C)	:- rotate(4, Rot, X), idx(X, Sides, (L, C)).
+
+% opposite(?Charge1, ?Charge2): Constrains Charge1 and Charge2 to be opposite.
+opposite('+', '-').
+opposite('-', '+').
+
+% in(+Element, +List): Element is in List.
+in(X, [X|_]).
+in(X, [_|T]) :- in(X, T).
+
+% Sides of each part
+sides([(b, '-'), (c, '+'), (d, '+'), (a, '-')]).
+sides([(a, '+'), (d, '+'), (c, '-'), (d, '-')]).
+sides([(c, '-'), (b, '+'), (d, '+'), (d, '-')]).
+sides([(d, '-'), (c, '-'), (d, '+'), (b, '-')]).
+sides([(b, '+'), (c, '-'), (a, '-'), (d, '+')]).
+sides([(a, '-'), (d, '-'), (c, '+'), (b, '+')]).
+sides([(b, '-'), (c, '+'), (b, '+'), (a, '-')]).
+sides([(a, '-'), (c, '-'), (a, '+'), (b, '+')]).
+sides([(b, '-'), (a, '+'), (d, '+'), (c, '-')]).
+
+% part(+UsedSides, -Part, -NewUsedSides): Generate a unique part with a rotation.
+part(UsedSides, (Sides, Rot), [Sides|UsedSides]) :-
+	sides(Sides),
+	\+in(Sides, UsedSides),
+	(Rot=0; Rot=1; Rot=2; Rot=3).
+
+% Assemble the circuit board. Output shows the part at each position, and its rotation in counterclockwise turns.
+assemble :-
+	part([], P1, U1),
+	part(U1, P2, U2),
+	edge(east, P1, L1, C1),		edge(west, P2, L1, C2),		opposite(C1, C2),
+	part(U2, P4, U3),
+	edge(south, P1, L7, C13),	edge(north, P4, L7, C14),	opposite(C13, C14),
+	part(U3, P5, U4),
+	edge(south, P2, L9, C17),	edge(north, P5, L9, C18),	opposite(C17, C18),
+	edge(east, P4, L3, C5),		edge(west, P5, L3, C6),		opposite(C5, C6),
+	part(U4, P3, U5),
+	edge(east, P2, L2, C3),		edge(west, P3, L2, C4),		opposite(C3, C4),
+	part(U5, P6, U6),
+	edge(east, P5, L4, C7),		edge(west, P6, L4, C8),		opposite(C7, C8),
+	edge(south, P3, L11, C21),	edge(north, P6, L11, C22),	opposite(C21, C22),
+	part(U6, P7, U7),
+	edge(south, P4, L8, C15),	edge(north, P7, L8, C16),	opposite(C15, C16),
+	part(U7, P8, U8),
+	edge(south, P5, L10, C19),	edge(north, P8, L10, C20),	opposite(C19, C20),
+	edge(east, P7, L5, C9),		edge(west, P8, L5, C10),	opposite(C9, C10),
+	part(U8, P9, _),
+	edge(east, P8, L6, C11),	edge(west, P9, L6, C12),	opposite(C11, C12),
+	edge(south, P6, L12, C23),	edge(north, P9, L12, C24),	opposite(C23, C24),
+	write('Position 1: '), writeln(P1), write('Position 2: '), writeln(P2), write('Position 3: '), writeln(P3),
+	write('Position 4: '), writeln(P4), write('Position 5: '), writeln(P5), write('Position 6: '), writeln(P6),
+	write('Position 7: '), writeln(P7), write('Position 8: '), writeln(P8), write('Position 9: '), writeln(P9).

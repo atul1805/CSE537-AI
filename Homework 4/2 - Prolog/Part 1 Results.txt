@@ -1,0 +1,55 @@
+Atul's:
+Moves Required:
+M0 C2 right
+M0 C1 left
+M0 C2 right
+M0 C1 left
+M2 C0 right
+M1 C1 left
+M2 C0 right
+M0 C1 left
+M0 C2 right
+M1 C0 left
+M1 C1 right
+All valids, default result:
+Moves Required:
+M0 C2 right
+M0 C1 left
+M0 C2 right
+M0 C1 left
+M2 C0 right
+M1 C0 left
+M2 C0 right
+M0 C2 left
+M0 C1 right
+M2 C0 left
+M0 C2 right
+M1 C0 left
+M2 C0 right
+M1 C0 left
+M2 C0 right
+Minimal moveset, no checking right coast validity:
+Moves Required:
+M1 C1 right
+M1 C0 left
+M1 C1 right
+M1 C0 left
+M2 C0 right
+M1 C0 left
+M2 C0 right
+M1 C0 left
+M1 C1 right
+
+Minimal moveset, correct answer:
+Moves Required:
+M1 C1 right
+M1 C0 left
+M0 C2 right
+M0 C1 left
+M2 C0 right
+M1 C1 left
+M2 C0 right
+M0 C1 left
+M0 C2 right
+M1 C0 left
+M1 C1 right
